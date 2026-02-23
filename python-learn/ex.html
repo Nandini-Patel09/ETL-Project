@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2 id="title">Welcome</h2>
+<button onclick="change()">Change Title</button>
+
+<script>
+function change() {
+    let x = document.getElementById("title"); // access element
+    x.style.color = "blue";                   // change style
+    x.innerHTML = "DOM Updated Successfully"; // change content
+}
+</script>
+
+</body>
+</html>

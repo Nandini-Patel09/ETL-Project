@@ -1,0 +1,7 @@
+A gaming app wants to determine the highest score out of 5 attempts. Write a program to take 5 numbers as input and print the largest.
+8.
+A healthcare app stores patient IDs and checks if they are palindromes for easy recall. Write a program that checks if a given string ID is a palindrome.
+9.
+A factory wants to calculate the number of ways workers can be arranged in a line. Write a program to find the factorial of a number.
+10.
+A company gives rewards for numbers divisible by both 3 and 5. Write a program to print all numbers between 1 and 100 that qualify.

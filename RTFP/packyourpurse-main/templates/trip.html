@@ -1,0 +1,13 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Plan Your Trip</h2>
+<form method="post">
+    <input type="text" name="destination" placeholder="Destination" required><br><br>
+    <input type="number" name="budget" placeholder="Budget" required><br><br> <!-- no ₹ symbol -->
+    <input type="number" name="travelers" placeholder="Number of Travelers" required><br><br>
+    <input type="number" name="days" placeholder="Number of Days" required><br><br>
+    <button type="submit">Plan Trip</button>
+</form>
+{% endblock %}

@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PackYourPurse - Travel Made Easy!</title>
+</head>
+<body>
+    <h1>Welcome to PackYourPurse! 🎒✨</h1>
+
+    <h2>Trip Details</h2>
+    <p>Destination: {{ trip.destination }}</p>
+    <p>Budget: ${{ trip.budget }}</p>
+    <p>Travelers: {{ trip.travelers }}</p>
+    <p>Days: {{ trip.days }}</p>
+
+    <h2>Expenses</h2>
+    <ul>
+    {% for expense in expenses %}
+        <li>{{ expense.category }} - ${{ expense.amount }}</li>
+    {% endfor %}
+    </ul>
+
+    <h2>Recommended Places to Explore 🌍</h2>
+    <ul>
+    {% for place in recommended_places %}
+        <li>{{ place }}</li>
+    {% endfor %}
+    </ul>
+
+    <a href="#">Plan New Trip</a> | <a href="#">Add New Expense</a> | <a href="#">Logout</a>
+</body>
+</html>

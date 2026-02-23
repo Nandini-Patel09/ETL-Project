@@ -1,0 +1,93 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Trip Dashboard</h2>
+
+{% if trip %}
+    <h3>Planned Trip:</h3>
+    <ul>
+        <li><strong>📍 Destination:</strong> {{ trip.destination }}</li>
+        <li><strong>💰 Budget:</strong> ₹{{ trip.budget }} <small>(in Rupees)</small></li>
+        <li><strong>👥 Travelers:</strong> {{ trip.travelers }}</li>
+        <li><strong>🗓️ Days:</strong> {{ trip.days }}</li>
+    </ul>
+{% else %}
+    <p>No trip planned yet. <a href="{{ url_for('trip') }}">Plan a trip</a>.</p>
+{% endif %}
+
+<hr style="margin-top: 20px; margin-bottom: 20px;">
+
+<h3>Expenses</h3>
+{% if expenses %}
+    <ul style="list-style-type: none; padding: 0;">
+        {% for expense in expenses %}
+        <li style="background: #f9f9f9; margin-bottom: 10px; padding: 10px; border-radius: 8px;">
+            {{ expense.category }} - ₹{{ expense.amount | float | round(2) }}
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No expenses added. <a href="{{ url_for('expenses') }}">Add an expense</a>.</p>
+{% endif %}
+
+<hr style="margin-top: 20px; margin-bottom: 20px;">
+
+<h3>Budget Summary</h3>
+<ul>
+    <li><strong>Total Expenses:</strong> ₹{{ total_expenses }}</li>
+    <li>
+        <strong>Remaining Budget:</strong> 
+        {% if remaining_budget < 0 %}
+            <span style="color: red;">₹{{ remaining_budget }}</span> <small>(Over Budget!)</small>
+        {% else %}
+            ₹{{ remaining_budget }}
+        {% endif %}
+    </li>
+</ul>
+
+<!-- Progress Bar -->
+{% if trip %}
+    {% set used_percentage = (total_expenses / (trip.budget | float) * 100) | round(2) %}
+
+    <div style="background-color: #e0e0e0; border-radius: 10px; height: 20px; width: 100%; margin-top:10px;">
+        <div style="height: 100%; 
+                    width: {{ used_percentage }}%; 
+                    background-color: {% if used_percentage <= 100 %}#4caf50{% else %}#f44336{% endif %}; 
+                    border-radius: 10px;
+                    text-align: center;
+                    color: white;
+                    font-size: 12px;
+                    line-height: 20px;
+                    transition: width 0.5s ease-in-out;">
+            {{ used_percentage }}%
+        </div>
+    </div>
+{% endif %}
+
+<hr style="margin-top: 20px; margin-bottom: 20px;">
+
+<h3>Suggestions for Your Trip</h3>
+{% if suggestions %}
+    <ul style="list-style-type: none; padding: 0;">
+        {% for suggestion in suggestions %}
+            <li style="margin-bottom: 20px;">
+                {% if suggestion.photo_url %}
+                <img src="{{ suggestion.photo_url }}" alt="Place Photo" style="width:80px; height:80px; object-fit:cover; border-radius:10px; vertical-align:middle; margin-right:10px;">
+                {% endif %}
+                <strong>{{ suggestion.name }}</strong><br>
+                <small>{{ suggestion.description }}</small>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No suggestions available yet.</p>
+{% endif %}
+
+<!-- Nice Buttons -->
+<div style="margin-top: 30px;">
+    <a href="{{ url_for('trip') }}" style="padding: 10px 20px; background-color: #4caf50; color: white; text-decoration: none; border-radius: 5px; margin-right: 10px;">Plan New Trip</a>
+    <a href="{{ url_for('expenses') }}" style="padding: 10px 20px; background-color: #2196f3; color: white; text-decoration: none; border-radius: 5px;">Add New Expense</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Account Registration</title>
+    <script>
+        function validateForm() {
+            // Fetch values
+            var uname = document.getElementById("uname").value;
+            var email = document.getElementById("email").value;
+            var pass = document.getElementById("pass").value;
+            var cpass = document.getElementById("cpass").value;
+            var phone = document.getElementById("phone").value;
+            var dob = document.getElementById("dob").value;
+            var genderM = document.getElementById("m").checked;
+            var genderF = document.getElementById("f").checked;
+
+            // Username
+            if (uname == "" || !/^[A-Za-z0-9]+$/.test(uname)) {
+                alert("Enter a valid username (letters and numbers only)");
+                return false;
+            }
+
+            // Email
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                alert("Invalid Email Format");
+                return false;
+            }
+
+            // Password length
+            if (pass.length < 6) {
+                alert("Password must be at least 6 characters");
+                return false;
+            }
+
+            // Confirm password
+            if (pass != cpass) {
+                alert("Passwords do not match");
+                return false;
+            }
+
+            // Phone number
+            if (!/^[0-9]{10}$/.test(phone)) {
+                alert("Phone must be 10 digits");
+                return false;
+            }
+
+            // DOB check
+            if (dob == "") {
+                alert("Select Date of Birth");
+                return false;
+            }
+
+            // Gender
+            if (!genderM && !genderF) {
+                alert("Select Gender");
+                return false;
+            }
+
+            alert("Registration Successful!");
+            return true;
+        }
+    </script>
+</head>
+
+<body>
+    <h2>Email Account Registration</h2>
+
+    <form onsubmit="return validateForm()">
+
+        Username: <br>
+        <input type="text" id="uname"><br><br>
+
+        Email: <br>
+        <input type="text" id="email"><br><br>
+
+        Password: <br>
+        <input type="password" id="pass"><br><br>
+
+        Confirm Password: <br>
+        <input type="password" id="cpass"><br><br>
+
+        Phone Number: <br>
+        <input type="text" id="phone"><br><br>
+
+        Date of Birth: <br>
+        <input type="date" id="dob"><br><br>
+
+        Gender: <br>
+        <input type="radio" name="gender" id="m">Male
+        <input type="radio" name="gender" id="f">Female <br><br>
+
+        Address: <br>
+        <textarea id="addr"></textarea><br><br>
+
+        <input type="submit" value="Create Account">
+
+    </form>
+</body>
+</html>

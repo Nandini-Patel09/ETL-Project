@@ -1,0 +1,19 @@
+9 Build an ATM where users can withdraw money if they have sufficient balance, otherwise display “Insufficient Balance”. Handle PIN verification too.
+Sample Input:
+PIN = 1234
+Balance = 5000
+Withdraw = 2000
+Expected Output:
+PIN Verified.
+Withdrawal Successful. Remaining Balance = 3000
+
+10 Store a list of books in a library. 
+Program should allow adding, removing, and displaying all books. 
+Also, show total number of books.
+Sample Input:
+Books = ["Python Basics", "Data Science", "AI Fundamentals"]
+Add Book: "Machine Learning"
+Remove Book: "Data Science"
+Expected Output:
+Current Books: ['Python Basics', 'AI Fundamentals', 'Machine Learning']
+Total Books: 3

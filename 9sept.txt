@@ -1,0 +1,596 @@
+ 
+Python Functions
+1. Prime Number Finder
+   * Function that returns all prime numbers up to `n`.
+   * Input: `n = 20`
+   * Output: `[2, 3, 5, 7, 11, 13, 17, 19]`
+ 
+2. Palindrome Checker
+   * Check if a string is palindrome (ignoring spaces & case).
+   * Input: `"Never odd or even"`
+   * Output: `True`
+ 
+3. Anagram Checker
+   * Function checks if two words are anagrams.
+   * Input: `"listen", "silent"`
+   * Output: `True`
+ 
+4. Count Vowels & Consonants
+   * Return count of vowels & consonants.
+   * Input: `"hello"`
+   * Output: `Vowels=2, Consonants=3`
+ 
+5. Longest Word Finder
+   * Return longest word in a sentence.
+   * Input: `"Python is amazing"`
+   * Output: `"amazing"`
+ 
+Python Modules (5 challenges) 
+1. Random Password Generator (`random`, `string`)
+   * Input: `length=6`
+   * Output: `"aB9@xQ"`
+ 
+2. Simple Calculator with `math`
+* Perform sqrt, factorial, sin, cos.
+* Input: `sqrt(25)`
+* Output: `5.0`
+ 
+3. Word Frequency Counter (`collections.Counter`)
+* Input: `"cat dog cat"`
+* Output: `{'cat':2,'dog':1}`
+ 
+4. Weather Simulator (`random`)
+* Input: None
+* Output: `"Weather: Sunny, Temp: 32°C"`
+ 
+5. Timer Program (`time`)
+* Input: `countdown(5)`
+* Output:
+  ```
+  5  
+  4  
+  3  
+  2  
+  1  
+  Time’s up!
+  ```
+ 
+Python OOPs (5 challenges)
+1. Bank Account Class
+Attributes:
+* `balance` → stores the current money in the account
+* `owner` (optional) → name of account holder
+ 
+Methods:
+ 
+* `deposit(amount)` → adds money to balance
+* `withdraw(amount)` → subtracts money if enough funds
+* `get_balance()` → returns balance
+ 
+Example:
+ 
+```python
+acc = BankAccount(100)   # initial balance = 100
+acc.deposit(50)          # balance = 150
+acc.withdraw(30)         # balance = 120
+print(acc.get_balance())
+```
+ 
+Output:
+ 
+```
+Balance: 120
+```
+ 
+---
+ 
+2. Student Class with Average
+ 
+Attributes:
+ 
+* `name` → student name
+* `marks` → list of student marks `[90, 80, 85]`
+ 
+Methods:
+ 
+* `get_average()` → returns average marks
+* `add_mark(mark)` → add new score
+* `get_highest()` → return highest mark
+* `get_lowest()` → return lowest mark
+ 
+Example:
+ 
+```python
+s = Student("Tom", [90, 80, 85])
+print(s.get_average())   # (90+80+85)/3 = 85.0
+s.add_mark(95)           # marks = [90,80,85,95]
+print(s.get_highest())   # 95
+```
+ 
+Output:
+ 
+```
+85.0
+95
+```
+ 
+---
+ 
+3. Employee Bonus System
+ 
+Attributes:
+ 
+* `name` → employee name
+* `salary` → base salary
+* `role` → role of employee (e.g., Manager, Developer, Intern)
+ 
+Methods:
+ 
+* `bonus()` → calculates bonus depending on role:
+ 
+  * Manager → 20% of salary
+  * Developer → 10% of salary
+  * Intern → 5% of salary
+ 
+Example:
+ 
+```python
+m = Manager("Alice", 50000)
+print(m.bonus())
+```
+ 
+Output:
+ 
+```
+10000
+```
+ 
+---
+ 
+4. Shape Area Calculator
+ 
+Base Class (Shape):
+ 
+*Attribute: `name`
+*Method: `area()` → to be overridden by subclasses
+ 
+Subclasses:
+ 
+* `Circle(radius)` → area = π × r²
+* `Rectangle(width, height)` → area = width × height
+ 
+Example:
+ 
+```python
+c = Circle(7)
+print(c.area())
+r = Rectangle(4, 5)
+print(r.area())
+```
+ 
+Output:
+ 
+```
+153.94
+20
+```
+ 
+---
+ 
+5. E-commerce Order Class
+ 
+Attributes:
+ 
+* `items` → dictionary of items `{name: price}`
+ 
+Methods:
+ 
+* `add(item, price)` → adds an item to order
+* `remove(item)` → removes item
+* `calculate_total()` → returns total price of all items
+* `show_items()` → lists all items in order
+ 
+Example:
+ 
+```python
+order = Order()
+order.add("Shirt", 500)
+order.add("Shoes", 1500)
+print(order.calculate_total())
+```
+ 
+Output:
+ 
+```
+Total = 2000 
+```
+ ## Python Functions (5 challenges)
+ 
+1. Fibonacci Generator
+ 
+* Function generates `n` Fibonacci numbers.
+ 
+* Input: `n = 7`
+ 
+* Output: `[0, 1, 1, 2, 3, 5, 8]`
+ 
+2. Factorial Using Recursion
+ 
+* Compute factorial using recursion.
+ 
+* Input: `5`
+ 
+* Output: `120`
+ 
+3. Unique Words Counter
+ 
+* Return unique words in a sentence.
+ 
+* Input: `"apple banana apple orange banana"`
+ 
+* Output: `{'apple':2,'banana':2,'orange':1}`
+ 
+4. Grade Calculator
+ 
+* Function takes marks and returns grade.
+ 
+* Input: `[85, 90, 78]`
+ 
+* Output: `"Grade: A"`
+ 
+5. Second Largest Number
+ 
+* Return 2nd largest number from a list.
+ 
+* Input: `[10, 5, 20, 8]`
+ 
+* Output: `10`
+ 
+## Python Modules ( 5 challenges)
+ 
+1. `os` → Count Files by Extension
+ 
+Write a program using `os` to count how many `.txt` and `.py` files are in the current directory.
+ 
+Sample Input (files in folder):
+ 
+```
+ 
+["notes.txt", "app.py", "data.csv", "report.txt", "main.py"]
+ 
+```
+ 
+Sample Output:
+ 
+```
+ 
+Text files: 2
+ 
+Python files: 2
+ 
+```
+ 
+---
+ 
+2. `statistics` → Exam Score Analysis
+ 
+Use `statistics` to calculate the mean, median, and variance of student exam scores.
+ 
+Sample Input:
+ 
+```
+ 
+Scores = [75, 80, 90, 100, 85, 90, 95]
+ 
+```
+ 
+Sample Output:
+ 
+```
+ 
+Mean = 88.57
+ 
+Median = 90
+ 
+Variance = 71.43
+ 
+```
+ 
+---
+ 
+3. `math` → Quadratic Equation Solver
+ 
+Use the `math` module to solve quadratic equations of the form `ax² + bx + c = 0`.
+ 
+Sample Input:
+ 
+```
+ 
+a = 1, b = -3, c = 2
+ 
+```
+ 
+Sample Output:
+ 
+```
+ 
+Roots are: 1.0 and 2.0
+ 
+```
+ 
+---
+ 
+4. `random` → Rock Paper Scissors Game
+ 
+Use `random.choice()` to let the computer play Rock–Paper–Scissors against the user.
+ 
+Sample Input:
+ 
+```
+ 
+User: Rock
+ 
+Computer (random): Scissors
+ 
+```
+ 
+Sample Output:
+ 
+```
+ 
+You chose Rock, Computer chose Scissors
+ 
+You Win!
+ 
+```
+ 
+---
+ 
+5. `sys` → Sum from Command Line
+ 
+Write a program using `sys.argv` to take three numbers from the command line and print their sum.
+ 
+Sample Input (command line):
+ 
+```
+ 
+python add.py 5 10 15
+ 
+```
+ 
+Sample Output:
+ 
+```
+ 
+Sum = 30
+ 
+```
+Python OOPs (5 challenges)
+ 
+### 1. Library System
+ 
+Create a `Library` class with:
+ 
+*Attributes: `books` (dict with book title → copies available)
+ 
+*Methods:
+ 
+* `borrow(title)` → decreases stock if available
+ 
+* `return_book(title)` → increases stock
+ 
+* `show_books()` → prints all available books
+ 
+Sample Input:
+ 
+```python
+ 
+lib = Library({"Python 101": 3, "Data Science": 2})
+ 
+print(lib.borrow("Python 101"))
+ 
+print(lib.return_book("Python 101"))
+ 
+lib.show_books()
+ 
+```
+ 
+Sample Output:
+ 
+```
+ 
+You borrowed Python 101
+ 
+You returned Python 101
+ 
+Available books: {'Python 101': 3, 'Data Science': 2}
+ 
+```
+ 
+---
+ 
+### 2. ATM Machine with PIN
+ 
+Create an `ATM` class with:
+ 
+*Attributes: `balance`, `pin`, `is_authenticated`
+ 
+*Methods:
+ 
+* `login(pin)` → checks PIN
+ 
+* `check_balance()`
+ 
+* `deposit(amount)`
+ 
+* `withdraw(amount)`
+ 
+Sample Input:
+ 
+```python
+ 
+atm = ATM(1234, 500)
+ 
+print(atm.login(1234))
+ 
+print(atm.deposit(200))
+ 
+print(atm.withdraw(100))
+ 
+print(atm.check_balance())
+ 
+```
+ 
+Sample Output:
+ 
+```
+ 
+Access Granted
+ 
+Deposited 200
+ 
+Withdrew 100
+ 
+Balance: 600
+ 
+```
+ 
+---
+ 
+3. University System
+ 
+Create `Professor` and `Student` classes.
+ 
+*Professor Attributes: `name`, `subject`
+ 
+*Professor Methods: `teach(course)`, `give_assignment(task)`
+ 
+*Student Attributes: `name`, `courses`, `assignments`
+ 
+*Student Methods: `enroll(course)`, `submit_assignment(task)`
+ 
+Sample Input:
+ 
+```python
+ 
+prof = Professor("Dr. Smith", "Computer Science")
+ 
+stud = Student("Alice")
+ 
+print(prof.teach("Python"))
+ 
+print(stud.enroll("Python"))
+ 
+print(prof.give_assignment("Project 1"))
+ 
+print(stud.submit_assignment("Project 1"))
+ 
+```
+ 
+Sample Output:
+ 
+```
+ 
+Dr. Smith is teaching Python
+ 
+Alice enrolled in Python
+ 
+Dr. Smith assigned: Project 1
+ 
+Alice submitted: Project 1
+ 
+```
+ 
+---
+ 
+### 4. Movie Ticket Booking
+ 
+Create a `Cinema` class with:
+ 
+*Attributes: `movies` (dict → movie: seats available)
+ 
+*Methods:
+ 
+* `book(movie, seats)` → reduces seat count
+ 
+* `cancel(movie, seats)` → adds back seats
+ 
+* `show_movies()` → shows available seats
+ 
+Sample Input:
+ 
+```python
+ 
+cinema = Cinema({"Avatar": 10, "Batman": 5})
+ 
+print(cinema.book("Avatar", 2))
+ 
+print(cinema.cancel("Avatar", 1))
+ 
+cinema.show_movies()
+ 
+```
+ 
+Sample Output:
+ 
+```
+ 
+Booked 2 tickets for Avatar
+ 
+Cancelled 1 ticket for Avatar
+ 
+Movies: {'Avatar': 9, 'Batman': 5}
+ 
+```
+ 
+---
+ 
+### 5. Restaurant Menu
+ 
+Create a `Menu` class with:
+ 
+*Attributes: `items` (dict → item: price)
+ 
+*Methods:
+ 
+* `add_item(name, price)`
+ 
+* `remove_item(name)`
+ 
+* `update_price(name, new_price)`
+ 
+* `show_menu()`
+ 
+Sample Input:
+ 
+```python
+ 
+menu = Menu()
+ 
+print(menu.add_item("Burger", 100))
+ 
+print(menu.add_item("Pizza", 200))
+ 
+print(menu.update_price("Pizza", 250))
+ 
+print(menu.remove_item("Burger"))
+ 
+menu.show_menu()
+ 
+```
+ 
+Sample Output:
+ 
+```
+ 
+Burger added
+ 
+Pizza added
+ 
+Pizza price updated to 250
+ 
+Burger removed
+ 
+Menu: {'Pizza': 250}
+ 
+```

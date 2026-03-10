@@ -1,0 +1,185 @@
+{
+  "expenses": [
+    {
+      "description": "zudio",
+      "amount": 2000.0,
+      "category": "Shopping",
+      "date": "2026-03-10",
+      "note": ""
+    }
+  ],
+  "incomes": [
+    {
+      "source": "Salary",
+      "amount": 60000.0,
+      "date": "2026-03-10",
+      "note": ""
+    }
+  ],
+  "savings_goals": [
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "Iphone",
+      "target": 100000.0,
+      "saved": 2000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "iphone",
+      "target": 100000.0,
+      "saved": 20000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "iphone",
+      "target": 100000.0,
+      "saved": 40000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "iphone",
+      "target": 100000.0,
+      "saved": 40000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "iphone",
+      "target": 100000.0,
+      "saved": 40000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "iphone",
+      "target": 100000.0,
+      "saved": 40000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "iphone",
+      "target": 100000.0,
+      "saved": 40000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "iphone",
+      "target": 100000.0,
+      "saved": 40000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "iphone",
+      "target": 100000.0,
+      "saved": 40000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    },
+    {
+      "name": "iphone",
+      "target": 100000.0,
+      "saved": 40000.0,
+      "target_date": "2026-09-06",
+      "created": "2026-03-10"
+    }
+  ],
+  "bills": [
+    {
+      "name": "Rent",
+      "amount": 10000.0,
+      "due_date": "2026-03-01",
+      "frequency": "Monthly",
+      "paid": false
+    }
+  ],
+  "savings_deposits": []
+}

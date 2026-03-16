@@ -4,7 +4,7 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, date, timedelta
-import json, os
+import json, os, io
 from ml_engine import ExpenseClassifier, SavingsAdvisor, SpendingForecaster
 
 # ─── Page Config ───────────────────────────────────────────────────────────────
@@ -12,45 +12,74 @@ st.set_page_config(page_title="FinTrack – AI Expense Advisor",
                    page_icon="💰", layout="wide",
                    initial_sidebar_state="expanded")
 
-# ─── CSS ───────────────────────────────────────────────────────────────────────
-st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
-html,body,[class*="css"]{font-family:'Sora',sans-serif;}
-.stApp{background:linear-gradient(135deg,#0f0c29,#1a1a2e,#16213e);color:#e0e0e0;}
-[data-testid="stSidebar"]{background:rgba(255,255,255,0.04);border-right:1px solid rgba(255,255,255,0.08);}
-[data-testid="metric-container"]{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:16px;backdrop-filter:blur(10px);}
-h1,h2,h3{font-family:'Sora',sans-serif;font-weight:700;}
-.stButton>button{background:linear-gradient(135deg,#6c63ff,#4ecdc4);color:white;border:none;border-radius:10px;font-weight:600;padding:.5rem 1.5rem;transition:all .3s ease;}
-.stButton>button:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(108,99,255,.4);}
-.stTextInput>div>div>input,.stNumberInput>div>div>input,.stSelectbox>div>div{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:#e0e0e0;}
-.stTabs [data-baseweb="tab-list"]{gap:8px;background:rgba(255,255,255,.04);border-radius:12px;padding:4px;}
-.stTabs [data-baseweb="tab"]{border-radius:8px;color:#aaa;font-weight:600;}
-.stTabs [aria-selected="true"]{background:linear-gradient(135deg,#6c63ff,#4ecdc4);color:white!important;}
-.goal-card{background:rgba(78,205,196,.1);border:1px solid rgba(78,205,196,.25);border-radius:12px;padding:12px 16px;margin:6px 0;}
-.chat-user{background:linear-gradient(135deg,#6c63ff,#4a44cc);border-radius:18px 18px 4px 18px;padding:12px 18px;margin:8px 0 4px 20%;color:white;font-size:.95rem;}
-.chat-bot{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px 18px 18px 4px;padding:12px 18px;margin:8px 20% 4px 0;color:#e0e0e0;font-size:.95rem;}
-.chat-meta{font-size:.75rem;color:#888;margin:2px 8px 8px;}
-</style>
-""", unsafe_allow_html=True)
-
 # ─── Data Storage ──────────────────────────────────────────────────────────────
 DATA_FILE = "fintrack_data.json"
 
 def load_data():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE) as f:
-            return json.load(f)
-    return {"expenses":[],"incomes":[],"savings_goals":[],"bills":[]}
+            d = json.load(f)
+        # ── Fix: deduplicate savings_goals on load ──────────────────────────
+        seen, unique = set(), []
+        for g in d.get("savings_goals", []):
+            key = (g["name"].strip().lower(), g["target"], g["target_date"])
+            if key not in seen:
+                seen.add(key)
+                unique.append(g)
+        d["savings_goals"] = unique
+        # ── Ensure budget_limits key exists ────────────────────────────────
+        d.setdefault("budget_limits", {})
+        return d
+    return {"expenses":[],"incomes":[],"savings_goals":[],"bills":[],"budget_limits":{}}
 
 def save_data(d):
     with open(DATA_FILE,"w") as f:
         json.dump(d, f, indent=2, default=str)
 
-# ─── Session State ─────────────────────────────────────────────────────────────
+# ─── Session State (must come BEFORE CSS so theme is available) ────────────────
 if "data"         not in st.session_state: st.session_state.data         = load_data()
 if "chat_history" not in st.session_state: st.session_state.chat_history = []
 if "editing_bill" not in st.session_state: st.session_state.editing_bill = None
+if "theme"        not in st.session_state: st.session_state.theme        = "dark"
+
+# ─── CSS (theme-aware) ─────────────────────────────────────────────────────────
+_dark = st.session_state.theme == "dark"
+_bg        = "linear-gradient(135deg,#0f0c29,#1a1a2e,#16213e)" if _dark else "linear-gradient(135deg,#f0f2f6,#e8ecf3,#dde3ed)"
+_text      = "#e0e0e0"   if _dark else "#1a1a2e"
+_sidebar   = "rgba(255,255,255,0.04)" if _dark else "rgba(255,255,255,0.7)"
+_metric    = "rgba(255,255,255,0.06)" if _dark else "rgba(255,255,255,0.8)"
+_metric_b  = "rgba(255,255,255,0.1)"  if _dark else "rgba(108,99,255,0.15)"
+_input_bg  = "rgba(255,255,255,.07)"  if _dark else "rgba(255,255,255,0.9)"
+_input_b   = "rgba(255,255,255,.15)"  if _dark else "rgba(108,99,255,0.3)"
+_tab_bg    = "rgba(255,255,255,.04)"  if _dark else "rgba(255,255,255,0.5)"
+_tab_col   = "#aaa"      if _dark else "#555"
+_chat_bot  = "rgba(255,255,255,.07)"  if _dark else "rgba(255,255,255,0.85)"
+_chat_botb = "rgba(255,255,255,.12)"  if _dark else "rgba(108,99,255,0.2)"
+_chat_meta = "#888"      if _dark else "#666"
+
+st.markdown(f"""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
+html,body,[class*="css"]{{font-family:'Sora',sans-serif;}}
+.stApp{{background:{_bg};color:{_text};}}
+[data-testid="stSidebar"]{{background:{_sidebar};border-right:1px solid rgba(255,255,255,0.08);}}
+[data-testid="metric-container"]{{background:{_metric};border:1px solid {_metric_b};border-radius:16px;padding:16px;backdrop-filter:blur(10px);}}
+h1,h2,h3{{font-family:'Sora',sans-serif;font-weight:700;color:{_text};}}
+.stButton>button{{background:linear-gradient(135deg,#6c63ff,#4ecdc4);color:white;border:none;border-radius:10px;font-weight:600;padding:.5rem 1.5rem;transition:all .3s ease;}}
+.stButton>button:hover{{transform:translateY(-2px);box-shadow:0 8px 25px rgba(108,99,255,.4);}}
+.stTextInput>div>div>input,.stNumberInput>div>div>input,.stSelectbox>div>div{{background:{_input_bg};border:1px solid {_input_b};border-radius:10px;color:{_text};}}
+.stTabs [data-baseweb="tab-list"]{{gap:8px;background:{_tab_bg};border-radius:12px;padding:4px;}}
+.stTabs [data-baseweb="tab"]{{border-radius:8px;color:{_tab_col};font-weight:600;}}
+.stTabs [aria-selected="true"]{{background:linear-gradient(135deg,#6c63ff,#4ecdc4);color:white!important;}}
+.goal-card{{background:rgba(78,205,196,.1);border:1px solid rgba(78,205,196,.25);border-radius:12px;padding:12px 16px;margin:6px 0;}}
+.chat-user{{background:linear-gradient(135deg,#6c63ff,#4a44cc);border-radius:18px 18px 4px 18px;padding:12px 18px;margin:8px 0 4px 20%;color:white;font-size:.95rem;}}
+.chat-bot{{background:{_chat_bot};border:1px solid {_chat_botb};border-radius:18px 18px 18px 4px;padding:12px 18px;margin:8px 20% 4px 0;color:{_text};font-size:.95rem;}}
+.chat-meta{{font-size:.75rem;color:{_chat_meta};margin:2px 8px 8px;}}
+.budget-ok{{color:#4ecdc4;font-weight:700;}}
+.budget-warn{{color:#f7b731;font-weight:700;}}
+.budget-over{{color:#ff6b6b;font-weight:700;}}
+</style>
+""", unsafe_allow_html=True)
 
 data = st.session_state.data
 
@@ -72,14 +101,41 @@ CATEGORIES = ["Food & Dining","Transport","Entertainment","Shopping",
 # ─── Sidebar ───────────────────────────────────────────────────────────────────
 st.sidebar.markdown("## 💰 FinTrack")
 st.sidebar.markdown("*AI Personal Finance Advisor*")
+
+# ── Theme Toggle ──────────────────────────────────────────────────────────────
+theme_icon = "☀️ Light Mode" if st.session_state.theme == "dark" else "🌙 Dark Mode"
+if st.sidebar.button(theme_icon, use_container_width=True):
+    st.session_state.theme = "light" if st.session_state.theme == "dark" else "dark"
+    st.rerun()
+
 st.sidebar.markdown("---")
 page = st.sidebar.radio("Navigate",
-    ["🏠 Dashboard","💸 Expenses","💼 Income","🎯 Savings Goals","🧾 Bills","🤖 AI Chatbot"],
+    ["🏠 Dashboard","💸 Expenses","💼 Income","🎯 Savings Goals","🧾 Bills","💰 Budget Limits","🤖 AI Chatbot"],
     label_visibility="collapsed")
 st.sidebar.markdown("---")
 st.sidebar.metric("💵 Balance",  f"Rs.{balance:,.0f}")
 st.sidebar.metric("📥 Income",   f"Rs.{total_income:,.0f}")
 st.sidebar.metric("📤 Expenses", f"Rs.{total_expenses:,.0f}")
+
+# ── CSV Export ────────────────────────────────────────────────────────────────
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 📥 Export Data")
+
+def _to_csv(df): return df.to_csv(index=False).encode("utf-8")
+
+if not expenses_df.empty:
+    st.sidebar.download_button("⬇️ Export Expenses CSV",
+        data=_to_csv(expenses_df), file_name="fintrack_expenses.csv",
+        mime="text/csv", use_container_width=True)
+if not income_df.empty:
+    st.sidebar.download_button("⬇️ Export Income CSV",
+        data=_to_csv(income_df), file_name="fintrack_income.csv",
+        mime="text/csv", use_container_width=True)
+if data["savings_goals"]:
+    goals_df = pd.DataFrame(data["savings_goals"])
+    st.sidebar.download_button("⬇️ Export Goals CSV",
+        data=_to_csv(goals_df), file_name="fintrack_goals.csv",
+        mime="text/csv", use_container_width=True)
 
 # ─── Local fallback chatbot ────────────────────────────────────────────────────
 def _local_chatbot(q, income, expenses, bal, srate, cats, tips, d):
@@ -419,6 +475,14 @@ elif page == "🎯 Savings Goals":
                 errors.append("Goal Name cannot be empty.")
             if goal_target <= 0:
                 errors.append("Target Amount must be greater than 0.")
+            # ── Duplicate check ──────────────────────────────────────────────
+            existing_keys = {
+                (g["name"].strip().lower(), g["target"], g["target_date"])
+                for g in data["savings_goals"]
+            }
+            new_key = (goal_name.strip().lower(), float(goal_target), str(goal_date))
+            if new_key in existing_keys:
+                errors.append("A goal with this name, target, and date already exists.")
             if errors:
                 for e in errors:
                     st.error(f"⚠️ {e}")
@@ -633,10 +697,103 @@ elif page == "🧾 Bills":
                 st.markdown("---")
 
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PAGE: BUDGET LIMITS
+# ══════════════════════════════════════════════════════════════════════════════
+elif page == "💰 Budget Limits":
+    st.markdown("# 💰 Budget Limits")
+    st.markdown("Set monthly spending limits per category and track how you're doing.")
+
+    budget_limits = st.session_state.data.setdefault("budget_limits", {})
+
+    # ── Current month spending per category ───────────────────────────────────
+    this_month = date.today().strftime("%Y-%m")
+    cat_spent_this_month = {}
+    if not expenses_df.empty:
+        edf_b = expenses_df.copy()
+        edf_b["date"] = pd.to_datetime(edf_b["date"])
+        monthly_exp = edf_b[edf_b["date"].dt.strftime("%Y-%m") == this_month]
+        if not monthly_exp.empty:
+            cat_spent_this_month = monthly_exp.groupby("category")["amount"].sum().to_dict()
+
+    # ── Set / Edit limits ─────────────────────────────────────────────────────
+    st.markdown("### ✏️ Set Monthly Limits")
+    st.caption("Leave 0 to remove a limit for that category.")
+    cols = st.columns(3)
+    updated_limits = {}
+    for idx, cat in enumerate(CATEGORIES):
+        with cols[idx % 3]:
+            current = float(budget_limits.get(cat, 0))
+            new_val = st.number_input(cat, min_value=0.0, step=100.0,
+                                      value=current, key=f"bl_{cat}")
+            if new_val > 0:
+                updated_limits[cat] = new_val
+
+    if st.button("💾 Save Budget Limits", use_container_width=True):
+        st.session_state.data["budget_limits"] = updated_limits
+        save_data(st.session_state.data)
+        st.success("Budget limits saved!")
+        st.rerun()
+
+    st.markdown("---")
+    st.markdown(f"### 📊 This Month's Spending vs Limits  ({this_month})")
+
+    if not updated_limits and not budget_limits:
+        st.info("No budget limits set yet. Enter limits above and click Save.")
+    else:
+        active_limits = budget_limits if budget_limits else updated_limits
+        rows = []
+        for cat, limit in active_limits.items():
+            spent = cat_spent_this_month.get(cat, 0.0)
+            pct   = (spent / limit * 100) if limit > 0 else 0
+            status = "✅ OK" if pct <= 75 else ("⚠️ Warning" if pct <= 100 else "🔴 Over!")
+            rows.append({"Category": cat, "Limit (Rs.)": limit,
+                         "Spent (Rs.)": spent, "Used %": round(pct, 1), "Status": status})
+
+        if rows:
+            for row in rows:
+                pct   = row["Used %"]
+                color = "#4ecdc4" if pct <= 75 else ("#f7b731" if pct <= 100 else "#ff6b6b")
+                bar   = min(pct, 100)
+                st.markdown(
+                    f'<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);'
+                    f'border-radius:12px;padding:14px 18px;margin:6px 0;">'
+                    f'<div style="display:flex;justify-content:space-between;align-items:center;">'
+                    f'<span style="font-weight:600;">{row["Category"]}</span>'
+                    f'<span style="color:{color};font-weight:700;">{row["Status"]}</span></div>'
+                    f'<div style="margin:6px 0;font-size:0.88rem;color:#aaa;">'
+                    f'Rs.{row["Spent (Rs.)"]:,.0f} / Rs.{row["Limit (Rs.)"]:,.0f} '
+                    f'&nbsp;—&nbsp; <b style="color:{color}">{pct:.1f}%</b></div>'
+                    f'<div style="background:rgba(255,255,255,0.08);border-radius:8px;height:8px;">'
+                    f'<div style="background:{color};width:{bar}%;height:8px;border-radius:8px;'
+                    f'transition:width 0.4s ease;"></div></div></div>',
+                    unsafe_allow_html=True)
+
+            # Summary chart
+            st.markdown("### 📈 Overview Chart")
+            chart_df = pd.DataFrame(rows)
+            fig = go.Figure()
+            fig.add_bar(name="Spent", x=chart_df["Category"], y=chart_df["Spent (Rs.)"],
+                        marker_color="#6c63ff")
+            fig.add_bar(name="Limit", x=chart_df["Category"], y=chart_df["Limit (Rs.)"],
+                        marker_color="rgba(78,205,196,0.4)")
+            fig.update_layout(barmode="overlay", plot_bgcolor="rgba(0,0,0,0)",
+                              paper_bgcolor="rgba(0,0,0,0)", font_color=_text,
+                              legend=dict(orientation="h", y=1.1))
+            st.plotly_chart(fig, use_container_width=True)
+
+            # ── Export budget report ──────────────────────────────────────────
+            report_df = pd.DataFrame(rows)
+            st.download_button("⬇️ Export Budget Report CSV",
+                data=_to_csv(report_df), file_name=f"fintrack_budget_{this_month}.csv",
+                mime="text/csv")
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE: AI CHATBOT
 # ══════════════════════════════════════════════════════════════════════════════
-elif page == "🤖 AI Chatbot":
+elif page == "🤖 AI Chatbot":  # noqa: E741
     st.markdown("# 🤖 FinBot — AI Finance Chatbot")
     st.markdown("*Ask me anything about your finances. I analyse your real data!*")
 
